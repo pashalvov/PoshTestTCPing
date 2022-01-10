@@ -1,0 +1,248 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<helpItems xmlns="http://msh" schema="maml">
+	<command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10"
+		xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10"
+		xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10"
+		xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+		<command:details>
+			<command:name>Test-TCPing</command:name>
+			<maml:description>
+				<maml:para>en: Checks for TCP port availability on one or more hosts. Ru: Проверяет доступность TCP порта на одном или нескольких хостах.</maml:para>
+			</maml:description>
+			<maml:copyright>
+				<maml:para />
+			</maml:copyright>
+			<command:verb>Test</command:verb>
+			<command:noun>TCPing</command:noun>
+			<dev:version />
+		</command:details>
+		<maml:description>
+            <maml:para>en: Checking the availability of a machine on a specific TCP port. This cmdlet is distinguished by its speed and can significantly reduce the processing time of multi-threaded scripts.</maml:para>
+			<maml:para>For example, you need to spill a file on 1000 machines, and they may be unavailable, or falsely respond via ICMP that they are on-line. This cmdlet will greatly reduce the downtime to check for host availability. Test-Connection can falsely answer that the host is online, and then all subsequent operations will hang and wait for a timeout, which will greatly slow down the overall result.</maml:para>
+            <maml:para>By default, it uses port 135 and a timeout of 500 milliseconds. This is more than optimal for working with Windows machines. For other conditions, you may have to play around with these parameters.</maml:para>
+            <maml:para>Ru: Проверка доступности машины по определённому TCP порту. Этот командлет отличает скорость его работы и позволяет значительно снизить время отработки много поточных скриптов.</maml:para>
+            <maml:para>Например надо разлить файл на 1000 машин, а они могут быть недоступны, или ложно отвечать по протоколу ICMP что они онлайн. Данный командлет значительно сократит простой на проверку доступности хоста. Test-Connection может ложно ответить что хост онлайн, и тогда все последующие операции зависнут и будут ждать таймаута, что сильно замедлит общий итог.</maml:para>
+            <maml:para>По умолчанию он использует порт 135 и таймаут в 500 миллисекунд. Для работы с Windows машинами это более чем оптимально. Для других условиях возможно придётся поиграться с этими параметрами.</maml:para>
+		</maml:description>
+		<command:syntax>
+			<command:syntaxItem>
+				
+				<maml:name>Test-TCPing</maml:name>
+				
+				<command:parameter required="false" variableLength="false" globbing="false" pipelineInput="true" position="1" aliases="IPAddresses">
+					<maml:name>ComputerName</maml:name>
+					<maml:description>
+						<maml:para>The hostname or its IPv4 address. The localhost is used by default.</maml:para>
+						<maml:para>Имя хоста или его IPv4 адрес. По умолчанию используется локальный хост.</maml:para>
+					</maml:description>
+					<command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+				</command:parameter>
+				
+				<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="false" position="2" aliases="">
+					<maml:name>Port</maml:name>
+					<maml:description>
+						<maml:para>TCP port number. Port 135 (NETBIOS-NS) is used by default.</maml:para>
+						<maml:para>Номер TCP порта. По умолчанию используется порт 135 (NETBIOS-NS).</maml:para>
+					</maml:description>
+					<command:parameterValue required="true" variableLength="true">Int32</command:parameterValue>
+				</command:parameter>
+				
+				<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="false" position="3" aliases="">
+					<maml:name>Timeout</maml:name>
+					<maml:description>
+						<maml:para>Timeout in milliseconds to wait for a reply from the host. The default is 500ms.</maml:para>
+						<maml:para>Таймаут в миллисекундах ожидания ответа от хоста. По умолчанию используется 500 мс.</maml:para>
+					</maml:description>
+					<command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+				</command:parameter>
+				
+				<command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="4" aliases="">
+					<maml:name>Quiet</maml:name>
+					<maml:description>
+						<maml:para>Reduces the output to a single object: Boolean true//false. It is highly advisable to use one host for testing :)</maml:para>
+						<maml:para>Сокращает вывод результата до одного объекта: Boolean true//false. Крайне желательно использовать для проверки одного хоста :)</maml:para>
+					</maml:description>
+					<command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+				</command:parameter>
+				
+			</command:syntaxItem>
+		</command:syntax>
+		
+		<command:parameters>
+			
+			<command:parameter required="false" variableLength="false" globbing="false" pipelineInput="true" position="1" aliases="IPAddresses">
+				<maml:name>ComputerName</maml:name>
+				<maml:description>
+					<maml:para>The hostname or its IPv4 address. The localhost is used by default.</maml:para>
+					<maml:para>Имя хоста или его IPv4 адрес. По умолчанию используется локальный хост.</maml:para>
+				</maml:description>
+				<command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+				<dev:type>
+					<maml:name>String[]</maml:name>
+					<maml:uri />
+				</dev:type>
+				<dev:defaultValue>localhost</dev:defaultValue>
+			</command:parameter>
+
+			<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="false" position="2" aliases="">
+				<maml:name>Port</maml:name>
+				<maml:description>
+					<maml:para>TCP port number. Port 135 (NETBIOS-NS) is used by default.</maml:para>
+					<maml:para>Номер TCP порта. По умолчанию используется порт 135 (NETBIOS-NS).</maml:para>
+				</maml:description>
+				<command:parameterValue required="true" variableLength="true">Int32</command:parameterValue>
+				<dev:type>
+					<maml:name>Int32</maml:name>
+					<maml:uri />
+				</dev:type>
+				<dev:defaultValue>135</dev:defaultValue>
+			</command:parameter>
+
+			<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="false" position="3" aliases="">
+				<maml:name>Timeout</maml:name>
+				<maml:description>
+					<maml:para>Timeout in milliseconds to wait for a reply from the host. The default is 500ms.</maml:para>
+					<maml:para>Таймаут в миллисекундах ожидания ответа от хоста. По умолчанию используется 500 мс.</maml:para>
+				</maml:description>
+				<command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+				<dev:type>
+					<maml:name>Int32</maml:name>
+					<maml:uri />
+				</dev:type>
+				<dev:defaultValue>500</dev:defaultValue>
+			</command:parameter>
+
+			<command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="4" aliases="">
+				<maml:name>Quiet</maml:name>
+				<maml:description>
+					<maml:para>Reduces the output to a single object: Boolean true/false. It is highly advisable to use one host for testing :)</maml:para>
+					<maml:para>Сокращает вывод результата до одного объекта: Boolean true/false. Крайне желательно использовать для проверки одного хоста :)</maml:para>
+				</maml:description>
+				<command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+				<dev:type>
+					<maml:name>SwitchParameter</maml:name>
+					<maml:uri />
+				</dev:type>
+				<dev:defaultValue></dev:defaultValue>
+			</command:parameter>
+			
+		</command:parameters>
+		
+		<command:examples>
+			
+			<command:example>
+				<maml:title>
+---------
+EXAMPLE 1
+Простая проверка локального хоста:
+				</maml:title>
+				<maml:introduction>
+					<maml:para></maml:para>
+				</maml:introduction>
+				<dev:code>Test-TCPing</dev:code>
+				<dev:remarks>
+					<maml:para>RESULT: Проверить свой порт 135/tcp и покажет таблицу с результатами</maml:para>
+				</dev:remarks>
+				<command:commandLines>
+					<command:commandLine>
+						<command:commandText />
+					</command:commandLine>
+				</command:commandLines>
+			</command:example>
+
+			<command:example>
+				<maml:title>
+---------					
+EXAMPLE 2
+Проверим хост и порт 443 (https):
+				</maml:title>
+				<maml:introduction>
+					<maml:para></maml:para>
+				</maml:introduction>
+				<dev:code>Test-TCPing -ComputerName google.ru -Port 443</dev:code>
+				<dev:remarks>
+					<maml:para>RESULT: Покажет доступность порта 443 (https) для хоста с именем google.ru</maml:para>
+				</dev:remarks>
+				<command:commandLines>
+					<command:commandLine>
+						<command:commandText />
+					</command:commandLine>
+				</command:commandLines>
+			</command:example>
+
+			<command:example>
+				<maml:title>
+---------
+EXAMPLE 3
+Проверим сразу несколько хостов и порт 443 (https):
+				</maml:title>
+				<maml:introduction>
+					<maml:para></maml:para>
+				</maml:introduction>
+				<dev:code>Test-TCPing -ComputerName google.ru,ya.ru,ggoo.ruuu,127.0.0.1 -Port 443</dev:code>
+				<dev:remarks>
+					<maml:para>RESULT: Покажет доступность порта 443 (https) для списка хостов</maml:para>
+				</dev:remarks>
+				<command:commandLines>
+					<command:commandLine>
+						<command:commandText />
+					</command:commandLine>
+				</command:commandLines>
+			</command:example>
+			
+			<command:example>
+				<maml:title>
+---------
+EXAMPLE 4
+Разольём папку и её содержимое на несколько хостов и выведем итоговый результат:
+				</maml:title>
+				<maml:introduction>
+					<maml:para></maml:para>
+				</maml:introduction>
+				<dev:code>$HostNames = 'server01','server02','server03'
+
+$Results = @()
+foreach ($HostName in $HostNames)
+{
+	$IsPing = $null
+	$IsPing = Test-TCPing -ComputerName $HostName -Port 445 -Quiet
+
+	if ($IsPing)
+	{
+		$CopyFrom = 'C:\Distribs\DiagTools'
+		$CopyTo = ("\\" + $HostName + "C$\Distribs\DiagTools")
+		$ArgumentList = "`"$CopyFrom`" `"$CopyTo`" /ZB /E"
+		$Robocopy = Start-Process robocopy -ArgumentList $ArgumentList -Wait -PassThru -WindowStyle Hidden
+	}
+	
+	$HashTable = [ordered]@{
+		'ComputerName' = $HostName
+		'isPing' = $IsPing
+		'Robocopy Exitcode' = $Robocopy.ExitCode
+	}
+	$Results += New-Object -TypeName PSObject -Property $HashTable
+}
+
+$Results
+				</dev:code>
+				<dev:remarks>
+					<maml:para>RESULT: Покажет список хостов и результат разливки</maml:para>
+				</dev:remarks>
+				<command:commandLines>
+					<command:commandLine>
+						<command:commandText />
+					</command:commandLine>
+				</command:commandLines>
+			</command:example>
+			
+		</command:examples>
+		<maml:relatedLinks>
+			<maml:navigationLink>
+				<maml:linkText>On-line Version:</maml:linkText>
+				<maml:uri></maml:uri>
+			</maml:navigationLink>
+		</maml:relatedLinks>
+	</command:command>
+
+</helpItems>
