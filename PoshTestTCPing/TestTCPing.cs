@@ -56,7 +56,7 @@ namespace PoshTestTCPing
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called
         protected override void ProcessRecord()
         {
-            WriteVerbose($"Получено машин для проверки: {ComputerName.Count()}. Порт TCP: {Port}. Таймаут (мс): {timeout.TotalMilliseconds}");
+            WriteVerbose($"Names count: {ComputerName.Count()}. TCP port: {Port}. Timeout (ms): {timeout.TotalMilliseconds}");
 
             foreach (string c in ComputerName)
             {
@@ -88,8 +88,7 @@ namespace PoshTestTCPing
         protected override void EndProcessing()
         {
             globalStopWatch.Stop();
-            //WriteDebug($"Отработка закончена, заняло времени: {globalStopWatch.Elapsed}");
-            //WriteVerbose(text: $"Выводим результат. Количество записей в объекте: {objectCount}. Заняло времени: {globalStopWatch.ElapsedMilliseconds}");
+            WriteDebug($"Finish checks, objects count {objectCount} and time taken: {globalStopWatch.Elapsed}");
         }
     }
 

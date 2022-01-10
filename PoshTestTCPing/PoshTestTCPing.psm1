@@ -11,66 +11,42 @@ $PSModuleRoot = $PSModule.ModuleBase
 $binaryModuleRoot = $PSModuleRoot
 
 # Set FormatData and TypeData. This is being done explicitly because those attributes are not supported to be set in the manifest .psd1 file on linux/mac.
-$formatFile = Join-Path -Path $PSModuleRoot -ChildPath "SQLProvider.Format.ps1xml"
+$formatFile = Join-Path -Path $PSModuleRoot -ChildPath "PoshTestTCPing.Format.ps1xml"
 Update-FormatData -AppendPath $formatFile
-$typeFile = Join-Path -Path $PSModuleRoot -ChildPath "SQLProvider.Types.ps1xml"
-Update-TypeData -PrependPath $typeFile
-$assessmentFormatFile = Join-Path -Path $PSModuleRoot -ChildPath "Microsoft.SqlServer.Assessment.format.ps1xml"
-Update-FormatData -PrependPath $assessmentFormatFile
+#$typeFile = Join-Path -Path $PSModuleRoot -ChildPath "SQLProvider.Types.ps1xml"
+#Update-TypeData -PrependPath $typeFile
 
-if (($PSVersionTable.Keys -contains "PSEdition") -and ($PSVersionTable.PSEdition -ne 'Desktop')) {
-    # .Net Core DLLs are under the 'coreclr' folder
-    if ([version]$PSVersionTable.PSVersion -ge "6.2.1") {
-        $binaryModuleRoot = Join-Path -Path $PSModuleRoot -ChildPath 'coreclr'
-    } else {
-        # Emit an error and remind user to upgrade...
-        Write-Error "This module requires PowerShell 6.2.1+. Please, upgrade your PowerShell version by checking https://aka.ms/pscore6."
-        Exit 1
+if ([version]$PSVersionTable.PSVersion -ge "5.1")
+{
+    $moduleDLLs = @('PoshTestTCPing.dll')
+
+    $importedModules = @()
+
+    $moduleDLLs | ForEach-Object
+    {
+        $binaryModulePath = Join-Path -Path $binaryModuleRoot -ChildPath "$_"
+        if (Test-Path -Path $binaryModulePath)
+        {
+            $binaryModule = Import-Module -Name $binaryModulePath -PassThru
+            $importedModules += $binaryModule
+        }
     }
+
+    <# Load misc assemblies (from the local folder)
+    $extraDLLS | ForEach-Object {
+        $binaryPath = Join-Path -Path $binaryModuleRoot -ChildPath "$_"
+
+        if (Test-Path -Path $binaryPath) {
+            Add-Type -Path $binaryPath
+        }
+    }
+    #>
 }
-
-$moduleDLLs = @('Microsoft.SqlServer.Management.PSSnapins.dll',
-                'Microsoft.SqlServer.Management.PSProvider.dll',
-                'Microsoft.AnalysisServices.PowerShell.Cmdlets.dll',
-                'Microsoft.SqlServer.Assessment.Cmdlets.dll',
-                'SqlServerPostScript.ps1')
-
-$extraDLLS = @( 'Microsoft.SqlServer.Smo.dll',
-                'Microsoft.SqlServer.Dmf.dll',
-                'Microsoft.SqlServer.SqlWmiManagement.dll',
-                'Microsoft.SqlServer.ConnectionInfo.dll',
-                'Microsoft.SqlServer.ConnectionInfoExtended.dll',
-                'Microsoft.SqlServer.SmoExtended.dll',
-                'Microsoft.SqlServer.Management.RegisteredServers.dll',
-                'Microsoft.SqlServer.Management.Sdk.Sfc.dll',
-                'Microsoft.SqlServer.SqlEnum.dll',
-                'Microsoft.SqlServer.RegSvrEnum.dll',
-                'Microsoft.SqlServer.WmiEnum.dll',
-                'Microsoft.SqlServer.ServiceBrokerEnum.dll',
-                'Microsoft.SqlServer.Management.Collector.dll',
-                'Microsoft.SqlServer.Management.CollectorEnum.dll',
-                'Microsoft.SqlServer.Management.Utility.dll',
-                'Microsoft.SqlServer.Management.UtilityEnum.dll',
-                'Microsoft.SqlServer.Management.HadrDMF.dll' )
-
-$importedModules = @()
-
-$moduleDLLs | ForEach-Object {
-    $binaryModulePath = Join-Path -Path $binaryModuleRoot -ChildPath "$_"
-    if (Test-Path -Path $binaryModulePath) {
-        $binaryModule = Import-Module -Name $binaryModulePath -PassThru
-        [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "", Justification="This is a false positive. PSA cannot inspect downstream usage")]
-        $importedModules += $binaryModule
-    }
-}
-
-# Load misc assemblies (from the local folder)
-$extraDLLS | ForEach-Object {
-    $binaryPath = Join-Path -Path $binaryModuleRoot -ChildPath "$_"
-
-    if (Test-Path -Path $binaryPath) {
-        Add-Type -Path $binaryPath
-    }
+else
+{
+    # Emit an error and remind user to upgrade...
+    Write-Error "This module requires PowerShell 5.1+. Please, upgrade your PowerShell version."
+    Exit 1
 }
 
 # When the module is unloaded, remove the nested binary module that was loaded with it
