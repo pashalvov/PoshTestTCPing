@@ -8,6 +8,7 @@
       2. [Проверка порта удалённой машины или сайта](#проверка-порта-удалённой-машины-или-сайта)
       3. [Проверка порта по списку, можно чередовать машины и сайты как угодно](#проверка-порта-по-списку-можно-чередовать-машины-и-сайты-как-угодно)
       4. [Пример тихой проверки, с выводом результата да/нет (bool)](#пример-тихой-проверки-с-выводом-результата-данет-bool)
+      5. [Пример разливки папки на несколько машин](#пример-разливки-папки-на-несколько-машин)
 
 # PoshTestTCPing
 Маленький модуль для проверки доступности TCP порта. Работает значительно быстрее, чем его аналоги. Используется для массовой многопоточной проверки в других скриптах, например надо разлить пакет на тысячи машин за короткое время.
@@ -92,10 +93,39 @@ Test-TCPing -ComputerName ya.ru -Port 443 -Quiet
 # True
 
 ### Проверим тип объекта в ответе
-(Test-TCPing -ComputerName ya.ru -Port 443 -Quiet).GetType()
-
+#(Test-TCPing -ComputerName ya.ru -Port 443 -Quiet).GetType()
 ### Результаты вывода
 # IsPublic IsSerial Name                                     BaseType
 # -------- -------- ----                                     --------
 # True     True     Boolean                                  System.ValueType
+```
+### Пример разливки папки на несколько машин
+```powershell
+Clear-Host
+
+$HostNames = 'server01','server02','server03'
+
+$Results = @()
+foreach ($HostName in $HostNames)
+{
+    $IsPing = $null
+    $IsPing = Test-TCPing -ComputerName $HostName -Port 445 -Quiet
+
+    if ($IsPing)
+    {
+        $CopyFrom = 'C:\Distribs\DiagTools'
+        $CopyTo = ("\\" + $HostName + "C$\Distribs\DiagTools")
+        $ArgumentList = "`"$CopyFrom`" `"$CopyTo`" /ZB /E"
+        $Robocopy = Start-Process robocopy -ArgumentList $ArgumentList -Wait -PassThru -WindowStyle Hidden
+    }
+    
+    $HashTable = [ordered]@{
+        'ComputerName' = $HostName
+        'isPing' = $IsPing
+        'Robocopy Exitcode' = $Robocopy.ExitCode
+    }
+    $Results += New-Object -TypeName PSObject -Property $HashTable
+}
+
+$Results
 ```
