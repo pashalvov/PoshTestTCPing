@@ -7,7 +7,7 @@ using System.Management.Automation.Runspaces;
 namespace PoshTestTCPing
 {
     [Cmdlet(VerbsDiagnostic.Test, "TCPing")]
-    [OutputType(typeof(CmdletResult))]
+    [OutputType(typeof(TestTCPingResults))]
     public class TestTCPing : PSCmdlet
     {
         [Parameter(
@@ -62,24 +62,15 @@ namespace PoshTestTCPing
             {
                 objectCount++;
 
-                TestTcpPortResult testTcpPortResult = TestTcpPort.IsPortOpen(c, Port, timeout);
-
-                CmdletResult cmdletResult = new CmdletResult
-                {
-                    ComputerName = c,
-                    Port = Port,
-                    Ping = testTcpPortResult.Result,
-                    PingTime = testTcpPortResult.PingTime,
-                    Description = testTcpPortResult.DebugMessage
-                };
+                TestTCPingResults testTCPingResults = TestTcpPort.IsPortOpen(c, Port, timeout);
 
                 if (Quiet.IsPresent)
                 {
-                    WriteObject(cmdletResult.Ping);
+                    WriteObject(testTCPingResults.Ping);
                 }
                 else
                 {
-                    WriteObject(cmdletResult);
+                    WriteObject(testTCPingResults);
                 }
             }
         }
@@ -93,7 +84,7 @@ namespace PoshTestTCPing
     }
 
     // Объявляем классы
-    public class CmdletResult
+    public class TestTCPingResults
     {
         public string ComputerName { get; set; }
         public int Port { get; set; }
@@ -102,18 +93,11 @@ namespace PoshTestTCPing
         public string Description { get; set; }
     }
 
-    public class TestTcpPortResult
-    {
-        public bool Result { get; set; }
-        public long PingTime { set; get; }
-        public string DebugMessage { get; set; }
-    }
-
     // И понеслись методы
     public class TestTcpPort
     {
         private static readonly Stopwatch stopwatch = Stopwatch.StartNew();
-        public static TestTcpPortResult IsPortOpen(string computerName, int port, TimeSpan timeout)
+        public static TestTCPingResults IsPortOpen(string computerName, int port, TimeSpan timeout)
         {
             try
             {
@@ -127,41 +111,49 @@ namespace PoshTestTCPing
                     {
                         if (client.Connected)
                         {
-                            return new TestTcpPortResult
+                            return new TestTCPingResults
                             {
-                                Result = true,
+                                ComputerName = computerName,
+                                Port = port,
+                                Ping = true,
                                 PingTime = stopwatch.ElapsedMilliseconds,
-                                DebugMessage = "Port is open"
+                                Description = "Port is open"
                             };
                         }
                         else
                         {
-                            return new TestTcpPortResult
+                            return new TestTCPingResults
                             {
-                                Result = false,
+                                ComputerName = computerName,
+                                Port = port,
+                                Ping = true,
                                 PingTime = stopwatch.ElapsedMilliseconds,
-                                DebugMessage = "Port filtered"
+                                Description = "Port filtered"
                             };
                         }
                     }
                     else
                     {
-                        return new TestTcpPortResult
+                        return new TestTCPingResults
                         {
-                            Result = false,
+                            ComputerName = computerName,
+                            Port = port,
+                            Ping = true,
                             PingTime = stopwatch.ElapsedMilliseconds,
-                            DebugMessage = "Timeout"
+                            Description = "Timeout"
                         };
                     }
                 }
             }
             catch (Exception ex)
             {
-                return new TestTcpPortResult
+                return new TestTCPingResults
                 {
-                    Result = false,
+                    ComputerName = computerName,
+                    Port = port,
+                    Ping = true,
                     PingTime = stopwatch.ElapsedMilliseconds,
-                    DebugMessage = $"Error: {ex.InnerException.Message}"
+                    Description = $"Error: {ex.InnerException.Message}"
                 };
             }
         }
