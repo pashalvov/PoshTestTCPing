@@ -22,8 +22,7 @@ if ([version]$PSVersionTable.PSVersion -ge "5.1")
 
     $importedModules = @()
 
-    $moduleDLLs | ForEach-Object
-    {
+    $moduleDLLs | ForEach-Object {
         $binaryModulePath = Join-Path -Path $binaryModuleRoot -ChildPath "$_"
         if (Test-Path -Path $binaryModulePath)
         {
