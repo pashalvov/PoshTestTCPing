@@ -9,7 +9,7 @@
     <View>
       <Name>TestTCPing</Name>
       <ViewSelectedBy>
-        <TypeName>PoshTestTCPing.CmdletResult</TypeName>
+        <TypeName>PoshTestTCPing.TestTCPingResults</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
