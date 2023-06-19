@@ -126,7 +126,7 @@ namespace PoshTestTCPing
                             {
                                 ComputerName = computerName,
                                 Port = port,
-                                Ping = true,
+                                Ping = false,
                                 PingTime = stopwatch.ElapsedMilliseconds,
                                 Description = "Port filtered"
                             };
@@ -138,7 +138,7 @@ namespace PoshTestTCPing
                         {
                             ComputerName = computerName,
                             Port = port,
-                            Ping = true,
+                            Ping = false,
                             PingTime = stopwatch.ElapsedMilliseconds,
                             Description = "Timeout"
                         };
@@ -151,7 +151,7 @@ namespace PoshTestTCPing
                 {
                     ComputerName = computerName,
                     Port = port,
-                    Ping = true,
+                    Ping = false,
                     PingTime = stopwatch.ElapsedMilliseconds,
                     Description = $"Error: {ex.InnerException.Message}"
                 };
