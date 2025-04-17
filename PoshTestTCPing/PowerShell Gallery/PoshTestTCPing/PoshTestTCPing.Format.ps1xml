@@ -56,7 +56,7 @@
               </TableColumnItem>
 
               <TableColumnItem>
-				  <PropertyName>Ping</PropertyName>
+                <PropertyName>Ping</PropertyName>
               </TableColumnItem>
 
               <TableColumnItem>

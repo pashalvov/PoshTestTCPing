@@ -10,19 +10,21 @@ A small module for checking the availability of a TCP port. It works much faster
 $ReleaseNotes = '
 ## v1.0.1
 Баг: поправил файл psm1
+## v1.0.5
+Баг: Не работал в Powershell v7.3 и выше параметр -Quiet
 '
 
 $GUID = 'a326b8ec-edb5-48eb-a408-5335b212e6df'
 
 New-ModuleManifest -Path $ManifestPath `
 -Author 'Pasha Lvov' `
--Copyright '© 2022 pashalvov' `
+-Copyright '© 2025 pashalvov' `
 -RootModule 'PoshTestTCPing.psm1' `
 -Guid $GUID `
--ModuleVersion '1.0.1' `
+-ModuleVersion '1.0.5' `
 -Description $Description `
 -PowerShellVersion '5.1' `
--FileList 'PoshTestTCPing.deps.json','PoshTestTCPing.dll','PoshTestTCPing.Format.ps1xml','PoshTestTCPing.pdb','PoshTestTCPing.psm1','PoshTestTCPing.psd1' `
+-FileList 'PoshTestTCPing.deps.json','PoshTestTCPing.dll','PoshTestTCPing.Format.ps1xml','PoshTestTCPing.psm1','PoshTestTCPing.psd1' `
 -CmdletsToExport 'Test-TCPing' `
 -Tags 'Ping', 'TCP', 'Network', 'Multithreaded-helpers' `
 -ProjectUri 'https://github.com/pashalvov/PoshTestTCPing' `

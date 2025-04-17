@@ -15,7 +15,7 @@ namespace PoshTestTCPing
             Position = 0,
             ValueFromPipeline = true,
             ValueFromPipelineByPropertyName = true)]
-        [Alias("IPAddresses")]
+        //[Alias("IPAddresses")]
         [ValidateNotNull]
         public string[] ComputerName { get; set; } = new string[] { Environment.MachineName };
 
